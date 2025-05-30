@@ -1,0 +1,78 @@
+input[type="text"] {
+  width: 500px;
+  height: 20px;
+  border-radius: 20px;
+  text-align: left;
+  font-family:'Roboto', sans-serif;
+  margin: 10px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+input[type="submit"] {
+  width: 140px;
+  height: 30px;
+  text-align: middle;
+  font-family: 'Roboto', sans-serif;
+  margin: 10px;
+  font-size: 15px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  padding: 5px;
+}
+
+.center {
+  height: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.right {
+  justify-content: right;
+  text-align: right;
+}
+
+a {
+  color: black;
+}
+
+form {
+  top: 50%;
+}
+
+h1 {
+  font-size: xxx-large;
+  font-family: 'Roboto', sans-serif;
+}
+
+.link {
+  margin: 10px;
+}
+
+.advanced {
+  font-family: 'Roboto', sans-serif;
+  color:crimson;
+}
+
+.font {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  width: 750px;
+}
+
+.row label {
+  flex: 0 0 160px;
+  font-family: 'Roboto', sans-serif;
+}
+
