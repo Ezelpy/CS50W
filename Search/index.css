@@ -1,10 +1,11 @@
 input[type="text"] {
   width: 500px;
+  max-width: 100%;
   height: 20px;
   border-radius: 20px;
   text-align: left;
   font-family:'Roboto', sans-serif;
-  margin: 20px;
+  margin: 20px auto;
   padding: 15px;
   font-size: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 14px;
@@ -30,7 +31,7 @@ input[type="submit"]:hover {
 }
 
 input[type="text"]:hover {
-  border-style: none;
+  border-color: white;
 }
 
 html, body {
@@ -58,11 +59,6 @@ a {
 
 a:hover {
   text-decoration: underline;
-}
-
-h1 {
-  font-size: xxx-large;
-  font-family: 'Roboto', sans-serif;
 }
 
 .link {
@@ -95,3 +91,6 @@ h1 {
   display: flex;
 }
 
+#imgAdvanced {
+  width: 100px;
+}
