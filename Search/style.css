@@ -86,11 +86,30 @@ a:hover {
   font-family: 'Roboto', sans-serif;
 }
 
-#imgLogo {
+.imgLogo {
   width: 300px;
   display: flex;
 }
 
-#imgAdvanced {
+.imgAdvanced {
   width: 100px;
+}
+
+#cmdAdvanced {
+  background-color: #4c8ffb;
+  color: white;
+  font-weight: bold;
+}
+
+.lblImg {
+  position: absolute;
+  color: #4285f5;
+  font-family: 'Roboto', sans-serif;
+  right: 10px;
+  bottom: 0px;
+}
+
+.container {
+  position: relative;
+  display: inline-block;
 }
