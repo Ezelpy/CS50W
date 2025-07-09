@@ -35,7 +35,8 @@ input[type="text"]:hover {
 }
 
 html, body {
-  height: 100%;overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 .center {
@@ -48,7 +49,6 @@ html, body {
 .right {
   justify-content: right;
   text-align: right;
-  margin: 10px
 }
 
 a {
@@ -62,7 +62,8 @@ a:hover {
 }
 
 .link {
-  margin: 10px;
+  text-align: right;
+  justify-content: right;
 }
 
 .advanced {
@@ -93,6 +94,8 @@ a:hover {
 
 .imgAdvanced {
   width: 100px;
+  align-items: center;
+  margin: 10px;
 }
 
 #cmdAdvanced {
@@ -112,4 +115,10 @@ a:hover {
 .container {
   position: relative;
   display: inline-block;
+}
+
+.header {
+  height: 50px;
+  align-items: center;
+  display: flex;
 }
