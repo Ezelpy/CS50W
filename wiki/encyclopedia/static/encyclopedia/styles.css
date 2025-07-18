@@ -37,6 +37,10 @@ textarea {
     margin-top: 5px;
 }
 
-.liEntry {
-    l
+.form {
+    margin: 10px;
+}
+
+.title {
+    background-color: red;
 }

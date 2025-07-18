@@ -2,6 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from . import util
 from markdown2 import Markdown
+from django import forms
+from django.shortcuts import redirect
+
+class newCreatePageForm(forms.Form):
+    title = forms.CharField(label="Title")
+    content = forms.CharField(widget=forms.Textarea, label="Content")
 
 def index(request):
     if request.GET.keys():
@@ -39,4 +45,17 @@ def searchResults(request, query):
 
     return render(request, "encyclopedia/searchResults.html", {
         "listEntries": listQuery
+    })
+
+def createNewPage(request):
+    if request.method == "POST":
+        form = newCreatePageForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            util.save_entry(title, content)
+            return redirect("wiki", title=title)
+
+    return render(request, "encyclopedia/createNewPage.html", {
+        "form": newCreatePageForm()
     })
