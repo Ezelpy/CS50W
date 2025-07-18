@@ -9,8 +9,12 @@ from random import randint
 # Form for Create New Page
 # This form will store the values of the controls as vars
 class newCreatePageForm(forms.Form):
-    title = forms.CharField(label="Title")
-    content = forms.CharField(widget=forms.Textarea, label="Content")
+    title = forms.CharField(
+        label="Title", 
+        widget=forms.TextInput(attrs={'class': 'title'})
+    )
+
+    content = forms.CharField(label="", widget=forms.Textarea)
 
 def index(request):
     # Handle when there are some GET parameters
@@ -26,7 +30,7 @@ def index(request):
             return HttpResponse(searchResults(request, query)) 
 
     if random == "true":
-        return HttpResponse(wiki(request, randomPage())) 
+        return redirect("wiki", title=randomPage())
 
     # Default page
     else:
@@ -74,6 +78,8 @@ def createNewPage(request):
         "form": newCreatePageForm()
     })
 
+# Get a random name from the list of entries
+# Returns a string witht the title
 def randomPage():
     listEntries = util.list_entries()
     randomIndex = randint(0, len(listEntries) - 1)
