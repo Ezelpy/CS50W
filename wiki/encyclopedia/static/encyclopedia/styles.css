@@ -41,13 +41,30 @@ textarea {
     margin-top: 5px;
 }
 
-.form {
-    margin: 10px;
-    height: 80%;
+.form-group {
+    margin-bottom: 1rem;
+    display: block;
 }
 
 .title {
-    width: 80%;
+    width: 90%;
     font-size: 15px;
     line-height: 15px;
+}
+
+.form-group label {
+  display: block !important;
+  margin-bottom: .25rem;
+}
+
+.form-group input,
+.form-group textarea {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-bottom: .5rem;
+}
+
+.createForm {
+  max-width: 800px;
 }

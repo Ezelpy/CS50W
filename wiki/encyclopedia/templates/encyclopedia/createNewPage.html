@@ -2,10 +2,18 @@
 
 {% block body %}
     <h1>Create new Page</h1>
-    <form class="form" method="POST">
+    <form class="createForm" method="POST">
         {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ form.title.label_tag }}
+            {{ form.title }} 
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.content.label_tag }}
+            {{ form.content }}
+        </div>
         
-        {{ form }}
         <div>
             <input type="submit" value="Create entry"> 
         </div>

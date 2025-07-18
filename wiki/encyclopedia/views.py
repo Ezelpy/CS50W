@@ -9,12 +9,21 @@ from random import randint
 # Form for Create New Page
 # This form will store the values of the controls as vars
 class newCreatePageForm(forms.Form):
+
     title = forms.CharField(
-        label="Title", 
-        widget=forms.TextInput(attrs={'class': 'title'})
+        label="Title",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control'
+        })
     )
 
-    content = forms.CharField(label="", widget=forms.Textarea)
+    content = forms.CharField(
+        label="Content", 
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 10
+        })
+    )
 
 def index(request):
     # Handle when there are some GET parameters
