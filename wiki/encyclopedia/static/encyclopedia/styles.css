@@ -53,14 +53,14 @@ textarea {
 }
 
 .form-group label {
-  display: block !important;
+  display: block;
   margin-bottom: .25rem;
 }
 
 .form-group input,
 .form-group textarea {
-  display: block !important;
-  width: 100% !important;
+  display: block;
+  width: 100%;
   box-sizing: border-box;
   margin-bottom: .5rem;
 }
