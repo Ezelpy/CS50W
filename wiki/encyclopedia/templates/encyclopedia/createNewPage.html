@@ -4,12 +4,12 @@
     <h1>Create new Page</h1>
     <form class="createForm" method="POST">
         {% csrf_token %}
-        <div class="form-group mb-3">
+        <div class="form-group">
             {{ form.title.label_tag }}
             {{ form.title }} 
         </div>
 
-        <div class="form-group mb-3">
+        <div class="form-group">
             {{ form.content.label_tag }}
             {{ form.content }}
         </div>
