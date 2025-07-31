@@ -37,6 +37,9 @@ class Listings(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ["-date"]
+
 class Bids(models.Model):
     # A bid can only be placed by one user so its a Foreignkey
     user = models.ForeignKey(
@@ -54,6 +57,9 @@ class Bids(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     amount = models.PositiveBigIntegerField()
 
+    class Meta:
+        ordering = ["-date"]
+
 class Comments(models.Model):
     # Only one user can make a single comment not many do the same one
     user = models.ForeignKey(
@@ -67,6 +73,9 @@ class Comments(models.Model):
         models.CASCADE, 
         related_name="comments"
     )
+
+    class Meta:
+        ordering = ["-date"]
 
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
