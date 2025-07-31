@@ -15,6 +15,11 @@ class Listings(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
     price = models.IntegerField()
+    photo = models.ImageField(
+        upload_to="listingPhotos",
+        null=True,
+        blank=True
+    )
     
     owner = models.ForeignKey(
         User, 
