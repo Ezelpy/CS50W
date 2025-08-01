@@ -17,6 +17,7 @@ class ListingForm(forms.Form):
         max_digits=10,
         widget=forms.NumberInput()
     )
+    # might have to add an url instead of an actual image that will then be saved
     photo = forms.ImageField(
         required=False,
         widget=forms.ClearableFileInput()

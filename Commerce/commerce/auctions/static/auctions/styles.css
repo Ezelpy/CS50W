@@ -21,6 +21,7 @@ body {
     justify-self: center;
     align-self: center;
     max-height: 250px;
+    max-width: 300px;
 }
 
 .listing_description {    
