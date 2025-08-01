@@ -15,6 +15,7 @@ class Category(models.Model):
         return self.name
 
 class Listing(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=64)
     description = models.TextField()
     price = models.IntegerField()

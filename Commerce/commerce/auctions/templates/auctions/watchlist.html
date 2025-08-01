@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    <ul class="active_listings">
+        {% for listing in listings %}
+        <li class="listing">
+            {% if listing.photo %}
+                <image class="image" src="{{ listing.photo.url }}" alt="Broom"></image>
+            {% endif %}
+            <div class="listing_description">
+                <h3>{{ listing.name }}</h3>
+                <div>
+                    <label class="price_tag">Price: $</label><label>{{ listing.price }}</label>
+                </div>
+                <a>{{ listing.description }}</a>
+                <label class="date">Created: {{ listing.date }}</label> 
+            </div>
+        </li> 
+            
+        {% empty %}
+            Empty.
+        {% endfor %}
+    </ul>
+    
+        
+{% endblock %}
