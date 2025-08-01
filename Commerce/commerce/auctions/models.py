@@ -3,15 +3,18 @@ from django.db import models
 
 class User(AbstractUser):
     watchlist = models.ManyToManyField(
-        "Listings", 
+        "Listing", 
         related_name="watched_by",  
         blank=True
     )
 
-class Categories(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=64)
 
-class Listings(models.Model):
+    def __str__(self):
+        return self.name
+
+class Listing(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
     price = models.IntegerField()
@@ -28,7 +31,7 @@ class Listings(models.Model):
     )
 
     category = models.ForeignKey(
-        Categories, 
+        Category, 
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True
@@ -39,8 +42,11 @@ class Listings(models.Model):
 
     class Meta:
         ordering = ["-date"]
+    
+    def __str__(self):
+        return self.name
 
-class Bids(models.Model):
+class Bid(models.Model):
     # A bid can only be placed by one user so its a Foreignkey
     user = models.ForeignKey(
         User, 
@@ -49,18 +55,21 @@ class Bids(models.Model):
     )
 
     listing = models.ForeignKey(
-        Listings, 
+        Listing, 
         models.CASCADE, 
         related_name="bids"
     )
 
     date = models.DateTimeField(auto_now_add=True)
-    amount = models.PositiveBigIntegerField()
+    amount = models.FloatField()
 
     class Meta:
         ordering = ["-date"]
+    
+    def __str__(self):
+        return self.name
 
-class Comments(models.Model):
+class Comment(models.Model):
     # Only one user can make a single comment not many do the same one
     user = models.ForeignKey(
         User, 
@@ -69,13 +78,16 @@ class Comments(models.Model):
     )
 
     listing = models.ForeignKey(
-        Listings, 
+        Listing, 
         models.CASCADE, 
         related_name="comments"
     )
 
     class Meta:
         ordering = ["-date"]
+
+    def __str__(self):
+        return self.name
 
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()
