@@ -5,8 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .models import User, Listing, Category, Bid, Comment
-from . forms import ListingForm
-
+from . forms import ListingForm, BidForm, CommentForm
 
 def index(request):
     listings = Listing.objects.all()
@@ -50,6 +49,59 @@ def create(request):
         return render(request, "auctions/createlisting.html", {
             "form": form
         })
+
+def listing(request, id):
+    # If user is logged in
+    # User can add or remove item from the watchlist
+    # User can place a bid that should be greater than the current bid
+    # User can comment to the listing page and display all the other comments
+
+    # If user is logged in and is owner
+    # User should be able to close the listing
+    # This makes the highest bidder win the auction
+
+    # If the user is logged in and has won a closed auction
+    # The user should be able to see that they won the auction
+        try:
+            listing = Listing.objects.get(id=id)
+            inWatchlist = False
+            if request.user.is_authenticated:
+                inWatchlist = listing in request.user.watchlist.all() 
+
+            if request.method == "POST":
+                if inWatchlist:
+                    request.user.watchlist.remove(listing)
+                    inWatchlist = False
+                else:
+                    request.user.watchlist.add(listing)
+                    inWatchlist = True
+
+            bidForm = BidForm()
+            commentForm = CommentForm()
+            comments = Comment.objects.all()
+            bids = listing.bids.all()
+            bidCount = listing.bids.count()
+            highestBig = bids.order_by("-amount").first()
+            listing = Listing.objects.get(id=id)
+        
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "bidForm": bidForm,
+                "comments":comments,
+                "commentForm": commentForm,
+                "highestBid": highestBig,
+                "bidCount": bidCount,
+                "inWatchlist": inWatchlist
+            })
+        
+        except RuntimeError:
+            message = "EROR 404: listing not found"
+            return render(request, "auctions/error.html", {
+                "message": message,
+            })
+    
+
+
 
 def login_view(request):
     if request.method == "POST":

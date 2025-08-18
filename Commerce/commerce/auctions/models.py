@@ -20,25 +20,27 @@ class Listing(models.Model):
     description = models.TextField()
     price = models.IntegerField()
     photo = models.ImageField(
-        upload_to="listingPhotos",
-        null=True,
-        blank=True
+        upload_to = "listingPhotos",
+        null = True,
+        blank = True
     )
     
     owner = models.ForeignKey(
         User, 
-        on_delete=models.CASCADE, 
-        related_name="listings"
+        on_delete = models.CASCADE, 
+        related_name = "listings"
     )
 
     category = models.ForeignKey(
         Category, 
         on_delete=models.SET_NULL, 
         null=True, 
-        blank=True
+        blank=True, 
+        related_name="category"
     )    
 
     date = models.DateTimeField(auto_now_add=True)
+    winner = models.ForeignKey(User, max_length=64, null=True, blank=True, on_delete=models.SET_NULL, related_name="won_listings")
     active = models.BooleanField(default=True)
 
     class Meta:
@@ -52,13 +54,13 @@ class Bid(models.Model):
     user = models.ForeignKey(
         User, 
         models.CASCADE,
-        related_name="bids"
+        related_name = "bids"
     )
 
     listing = models.ForeignKey(
         Listing, 
-        models.CASCADE, 
-        related_name="bids"
+        models.CASCADE,
+        related_name = "bids" 
     )
 
     date = models.DateTimeField(auto_now_add=True)
@@ -75,13 +77,13 @@ class Comment(models.Model):
     user = models.ForeignKey(
         User, 
         models.CASCADE, 
-        related_name="comments"
+        related_name = "comments"
     )
 
     listing = models.ForeignKey(
         Listing, 
         models.CASCADE, 
-        related_name="comments"
+        related_name = "comments"
     )
 
     class Meta:

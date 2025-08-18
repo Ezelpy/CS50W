@@ -1,0 +1,58 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ name }}</h2>
+        <form class="watchlistForm" method="POST">
+            {% csrf_token %}
+            <div>
+                {% if inWatchlist %}
+                    <input type="submit" value="Remove from Watchlist">
+                {% else %}
+                    <input type="submit" value="Add to Watchlist">
+                {% endif %}
+                <input type="hidden" name="watchlist" value="watchlist">
+            </div>
+        </form>    
+    <image src="{{ listing.photo.url }}" alt="{{ listing.name }}">
+    <label>{{ listing.description }}</label>
+    
+    {% if highestBid %}
+        <label>{{ highestBid }}</label>
+        <label>{{ bidCount }} bids so far</label>
+        {% if user.is_authenticated %}
+            <form class="bidForm" method="POST">
+                {% csrf_token %}
+                {{ bidForm }}
+                <div>
+                    <input type="submit" value="Place Bid"> 
+                </div>
+            </form>
+        {% endif %}
+
+    {% else %}
+        <label>{{ listing.price }}</label>  
+        <label>{{ bidCount }} bids so far</label>
+        {% if user.is_authenticated %}
+            <form class="bidForm" method="POST">
+                {% csrf_token %}
+                {{ bidForm }}
+                <div>
+                    <input type="submit" value="Place Bid"> 
+                </div>
+            </form> 
+        {% endif %}
+    {% endif %}
+    <label>Details</label>
+    <ul>
+        <li>
+            <label>Listed by: {{ listing.owner }}</label>
+        </li>
+        <li>
+            {% if listing.category %}
+                <label>Category: {{ listing.category }}</label>
+            {% else %}
+                <label>Category: No Category Listed</label>
+            {% endif %}
+        </li>
+    </ul>
+{% endblock %}
