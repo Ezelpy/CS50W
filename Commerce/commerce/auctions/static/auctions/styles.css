@@ -39,3 +39,8 @@ body {
 .date {
     font-weight: 200;
 }
+
+.listingImg img{
+    max-width: 800px;
+    max-height: 500px;
+}

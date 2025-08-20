@@ -2,6 +2,7 @@
 
 {% block body %}
     <h2>Listing: {{ name }}</h2>
+    {% if isActive %}
         <form class="watchlistForm" method="POST">
             {% csrf_token %}
             <div>
@@ -13,46 +14,90 @@
                 <input type="hidden" name="watchlist" value="watchlist">
             </div>
         </form>    
-    <image src="{{ listing.photo.url }}" alt="{{ listing.name }}">
-    <label>{{ listing.description }}</label>
+    {% endif %}
+    {% if listing.photo %}
+    <div class="listingImg">
+       <image src="{{ listing.photo }}" alt="{{ listing.name }}"></image> 
+    </div>
+    {% endif %}
     
-    {% if highestBid %}
-        <label>{{ highestBid }}</label>
-        <label>{{ bidCount }} bids so far</label>
-        {% if user.is_authenticated %}
-            <form class="bidForm" method="POST">
-                {% csrf_token %}
-                {{ bidForm }}
-                <div>
-                    <input type="submit" value="Place Bid"> 
-                </div>
-            </form>
-        {% endif %}
+    <div>
+        <label>{{ listing.description }}</label>        
+    </div>
 
-    {% else %}
-        <label>{{ listing.price }}</label>  
-        <label>{{ bidCount }} bids so far</label>
-        {% if user.is_authenticated %}
-            <form class="bidForm" method="POST">
-                {% csrf_token %}
-                {{ bidForm }}
-                <div>
-                    <input type="submit" value="Place Bid"> 
-                </div>
-            </form> 
+    <div>
+        <label>${{ highestBid }}</label>
+        <label>{{ bidCount }} bids so far.</label>
+        {% if isCurrentBid and isActive %}
+            <label>Your bid is the current bid.</label>
+        {% endif %}
+    </div>
+
+    {% if user.is_authenticated and isActive %}
+        <form class="bidForm" method="POST">
+            {% csrf_token %}
+            {{ bidForm }}
+            <div>
+                <input type="submit" value="Place Bid"> 
+            </div>
+            
+        </form>
+        <input type="hidden" name="bid" value="bid">
+    {% endif %}
+    {% if isOwner and isActive %}
+        <form class="closeForm" method="POST">
+            {% csrf_token %}
+            <div>
+                <input type="submit" value="Close Auction"> 
+            </div>
+            <input type="hidden" name="close" value="close">
+        </form>
+    {% endif %}
+    {% if not isActive %}
+        <label>This listing is not active.</label>
+        {% if isWinner %}
+            <label>You won this auction.</label>
         {% endif %}
     {% endif %}
-    <label>Details</label>
+    <div>
+        <label>Details</label>
+        <ul>
+            <li>
+                <label>Listed by: {{ listing.owner }}</label>
+            </li>
+            <li>
+                {% if listing.category %}
+                    <label>Category: {{ listing.category }}</label>
+                {% else %}
+                    <label>Category: No Category Listed</label>
+                {% endif %}
+            </li>
+        </ul>        
+    </div>
+
+    <h2>Comments</h2>
+    {% if user.is_authenticated and isActive %}
+    <form class="commentForm" method="POST">
+            {% csrf_token %}
+            {{ commentForm }}
+            <div>
+                <input type="submit" value="Add new comment"> 
+            </div>
+    </form>
+    <input type="hidden" name="comment" value="comment">
+    {% endif %}
     <ul>
-        <li>
-            <label>Listed by: {{ listing.owner }}</label>
-        </li>
-        <li>
-            {% if listing.category %}
-                <label>Category: {{ listing.category }}</label>
-            {% else %}
-                <label>Category: No Category Listed</label>
-            {% endif %}
-        </li>
+        {% for comm in comments %}
+            <li>
+                <label>{{ comm.user }}</label>
+                <label>{{ comm.date }}</label>
+                <label>{{ comm.comment }}</label>
+            </li>
+        {% empty %}
+        <label>There are no comments</label>
+        {% endfor %}
     </ul>
+    
+
+
 {% endblock %}

@@ -19,10 +19,9 @@ class Listing(models.Model):
     name = models.CharField(max_length=64)
     description = models.TextField()
     price = models.IntegerField()
-    photo = models.ImageField(
-        upload_to = "listingPhotos",
-        null = True,
-        blank = True
+    photo = models.URLField(
+        blank = True,
+        null=True
     )
     
     owner = models.ForeignKey(
@@ -70,7 +69,7 @@ class Bid(models.Model):
         ordering = ["-date"]
     
     def __str__(self):
-        return self.name
+         return f"{self.amount}"
 
 class Comment(models.Model):
     # Only one user can make a single comment not many do the same one
@@ -90,7 +89,7 @@ class Comment(models.Model):
         ordering = ["-date"]
 
     def __str__(self):
-        return self.name
+        return self.comment
 
     date = models.DateTimeField(auto_now_add=True)
     comment = models.TextField()

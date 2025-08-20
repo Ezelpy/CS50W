@@ -7,7 +7,7 @@
         {% for listing in listings %}
         <li class="listing">
             {% if listing.photo %}
-                <image class="image" src="{{ listing.photo.url }}" alt="Broom"></image>
+                <image class="image" src="{{ listing.photo }}" alt="Broom"></image>
             {% endif %}
             <div class="listing_description">
                 <a href="{% url 'listing' listing.id %}">{{ listing.name }}</a>

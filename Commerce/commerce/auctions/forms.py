@@ -18,10 +18,10 @@ class ListingForm(forms.Form):
         widget = forms.NumberInput()
     )
     # might have to add an url instead of an actual image that will then be saved
-    photo = forms.ImageField(
-        required = False,
-        widget = forms.ClearableFileInput()
+    photo = forms.URLField(
+        required = False
     )
+
     category = forms.ModelChoiceField(
         queryset = Category.objects.all(),
         empty_label = "Choose a category",

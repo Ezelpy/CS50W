@@ -64,34 +64,53 @@ def listing(request, id):
     # The user should be able to see that they won the auction
         try:
             listing = Listing.objects.get(id=id)
-            inWatchlist = False
-            if request.user.is_authenticated:
-                inWatchlist = listing in request.user.watchlist.all() 
+            highestBid = listing.price
+            bidCount = listing.bids.count()
+            isActive = listing.active
+
+            isWinner, inWatchlist, isOwner, isCurrentBid, currentWinner = checkUserPrivileges(
+                request, isActive, listing
+            )
 
             if request.method == "POST":
-                if inWatchlist:
-                    request.user.watchlist.remove(listing)
-                    inWatchlist = False
-                else:
-                    request.user.watchlist.add(listing)
-                    inWatchlist = True
+                # If user wants to edit watchlist status
+                if request.POST.get('watchlist'):
+                    inWatchlist = modifyWatchlist(request, listing)
 
+                # If user wants to place a bid
+                elif request.POST.get('bid'):
+                    form = BidForm(request.POST)
+
+                    if form.is_valid():
+                        highestBid, bidCount = bidListing(request, form, listing, highestBid, bidCount)
+                    else: raise ValueError("Bid should be higher that previous bid")
+
+                # If user wants to close the auction
+                elif request.POST.get('close'):
+                    isActive = closeListing(listing, currentWinner)
+
+                # If user wants to add a comment
+                elif request.POST.get('comment'):
+                    form = CommentForm(request.POST)
+                    addNewComment(request, listing, form)
+
+            # In any case, return to listing
             bidForm = BidForm()
             commentForm = CommentForm()
-            comments = Comment.objects.all()
-            bids = listing.bids.all()
-            bidCount = listing.bids.count()
-            highestBig = bids.order_by("-amount").first()
-            listing = Listing.objects.get(id=id)
-        
+            comments = listing.comments.all()
+            
             return render(request, "auctions/listing.html", {
                 "listing": listing,
                 "bidForm": bidForm,
                 "comments":comments,
                 "commentForm": commentForm,
-                "highestBid": highestBig,
+                "highestBid": highestBid,
                 "bidCount": bidCount,
-                "inWatchlist": inWatchlist
+                "inWatchlist": inWatchlist,
+                "isActive": isActive,
+                "isOwner": isOwner,
+                "isWinner": isWinner,
+                "isCurrentBid": isCurrentBid,
             })
         
         except RuntimeError:
@@ -155,3 +174,97 @@ def register(request):
         return render(request, "auctions/register.html")
     
 
+# Helper functions
+# LISTING PAGE
+
+# FUNCTION
+# NAME:        checkUserPrivileges
+# DESCRIPTION: Function will check user privileges and update the variables
+# ARGUMENTS:   It needs the request, a boolean stating if the auction is 
+#              active, and the listing
+# OUTPUT:      It returns a boolean stating if the current user is the winner 
+#              of the auction, if the listing is in the watchlist, if the user
+#              is the owner of the listing, if the user is the current highest
+#              bidder, and the highest bidder
+def checkUserPrivileges(request, isActive, listing):
+    currentWinner = Bid.objects.all().order_by("-amount").first().user
+    inWatchlist = False
+    isOwner = False
+    isWinner = False
+    isCurrentBid = False
+
+    if not isActive:
+        isWinner = listing.winner == request.user
+            
+    if request.user.is_authenticated:
+        inWatchlist = listing in request.user.watchlist.all()
+        isOwner = request.user == listing.owner
+        isCurrentBid = request.user == currentWinner
+    
+    return isWinner, inWatchlist, isOwner, isCurrentBid, currentWinner
+
+# FUNCTION
+# NAME:        modifyWatchlist
+# DESCRIPTION: Function will modify the watchlist status of a listing
+# ARGUMENTS:   It needs the request and a listing
+# OUTPUT:      It returns a boolean stating if the current listing is 
+#              in the watchlist
+def modifyWatchlist(request, listing):
+    if inWatchlist:
+        request.user.watchlist.remove(listing)
+        inWatchlist = False
+    else:
+        request.user.watchlist.add(listing)
+        inWatchlist = True
+    return inWatchlist
+
+# FUNCTION
+# NAME:        bidListing
+# DESCRIPTION: Function will add new bid to the listing
+# ARGUMENTS:   It needs the request, the listing, bid, and current number 
+#              of bids
+# OUTPUT:      It returns the new highest bid and the updated number of bids
+def bidListing(request, form, listing, highestBid, bidCount):
+    bid = form.cleaned_data["bid"]
+    if bid > highestBid:
+        newBid = Bid.objects.create(
+            user=request.user,
+            listing=listing,
+            amount=bid
+        )
+        listing.price = bid
+        highestBid = bid
+        bidCount += 1
+        listing.save()
+    return highestBid, bidCount
+
+    
+    
+
+# FUNCTION
+# NAME:        closeListing
+# DESCRIPTION: Function will close the listing and set the winner as the 
+#              highest bidder.
+# ARGUMENTS:   It needs the listing and the user that is currently winning the
+#              bid
+# OUTPUT:      It returns a boolean stating the listing is not active
+def closeListing(listing, currentWinner):
+    listing.winner = currentWinner
+    listing.active = False
+    isActive = False
+    listing.save()
+    return isActive
+
+# FUNCTION
+# NAME:        addNewComment
+# DESCRIPTION: Function will add a new comment if the form is valid
+# ARGUMENTS:   It needs the request, the listing and the comment form
+# OUTPUT:      None
+def addNewComment(request, listing, form):
+    if form.is_valid():
+        comment = form.cleaned_data["comment"]
+        newComment = Comment.objects.create(
+            user=request.user,
+            listing=listing,
+            comment=comment,
+        )
