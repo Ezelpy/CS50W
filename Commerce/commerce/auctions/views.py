@@ -11,6 +11,7 @@ def index(request):
     listings = Listing.objects.all()
     return render(request, "auctions/index.html", {
         "listings": listings,
+        "title": "Active Listings"
     })
 
 def categories(request):
@@ -19,11 +20,22 @@ def categories(request):
         "categories": categories
     })
 
+def category(request, name):
+    name = name.capitalize()
+    category = Category.objects.filter(name=name).first()
+    listings = category.listings.select_related("owner", "category").order_by("-date")
+    return render(request, "auctions/index.html", {
+        "listings": listings,
+        "title": category
+    })
+
 @login_required
 def watchlist(request):
     listings = request.user.watchlist.all() 
-    return render(request, "auctions/watchlist.html", {
+    return render(request, "auctions/index.html", {
         "listings": listings,
+        "title": "Watchlist"
+
     })
 
 @login_required
@@ -51,17 +63,6 @@ def create(request):
         })
 
 def listing(request, id):
-    # If user is logged in
-    # User can add or remove item from the watchlist
-    # User can place a bid that should be greater than the current bid
-    # User can comment to the listing page and display all the other comments
-
-    # If user is logged in and is owner
-    # User should be able to close the listing
-    # This makes the highest bidder win the auction
-
-    # If the user is logged in and has won a closed auction
-    # The user should be able to see that they won the auction
         try:
             listing = Listing.objects.get(id=id)
             highestBid = listing.price
@@ -119,8 +120,6 @@ def listing(request, id):
                 "message": message,
             })
     
-
-
 
 def login_view(request):
     if request.method == "POST":

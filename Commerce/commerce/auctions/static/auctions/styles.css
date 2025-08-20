@@ -6,13 +6,25 @@ body {
     border-style: solid;
     border-color: lightgray;
     border-radius: 5px;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0px;
     margin: 10px;
     border-width: 1px;
     list-style-type: none;
     display: grid;
     grid-template-columns: 400px 1fr;  
     max-height: 300px;
+}
+
+.listingTitle {
+    font-size: 30px;
+    color: black;
+}  
+
+.active_listings {
+    padding: 0;
+    margin: 0;
 }
 
 .image {
@@ -32,7 +44,7 @@ body {
     gap: 1rem;
 }
 
-.price_tag {
+.priceTag {
     font-weight: bold;
 }
 

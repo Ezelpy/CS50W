@@ -35,7 +35,7 @@ class Listing(models.Model):
         on_delete=models.SET_NULL, 
         null=True, 
         blank=True, 
-        related_name="category"
+        related_name="listings"
     )    
 
     date = models.DateTimeField(auto_now_add=True)
