@@ -76,7 +76,7 @@ def listing(request, id):
             if request.method == "POST":
                 # If user wants to edit watchlist status
                 if request.POST.get('watchlist'):
-                    inWatchlist = modifyWatchlist(request, listing)
+                    inWatchlist = modifyWatchlist(request, listing, inWatchlist)
 
                 # If user wants to place a bid
                 elif request.POST.get('bid'):
@@ -208,7 +208,7 @@ def checkUserPrivileges(request, isActive, listing):
 # ARGUMENTS:   It needs the request and a listing
 # OUTPUT:      It returns a boolean stating if the current listing is 
 #              in the watchlist
-def modifyWatchlist(request, listing):
+def modifyWatchlist(request, listing, inWatchlist):
     if inWatchlist:
         request.user.watchlist.remove(listing)
         inWatchlist = False

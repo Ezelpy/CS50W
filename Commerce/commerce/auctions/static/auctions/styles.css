@@ -52,7 +52,125 @@ body {
     font-weight: 200;
 }
 
+.listingImg {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
 .listingImg img{
     max-width: 800px;
     max-height: 500px;
+    object-fit: cover;
+    justify-self: center;
+}
+
+.listingDescription {
+    flex: 1;
+}
+
+.listingInfo {
+    display: flex;
+    margin: 10px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.listingHeader {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: orange;
+    padding-right: 20px;
+    border-radius: 20px;
+    height: 60px;
+}
+
+.listingHeaderBtn {
+    margin-left: auto;
+    display: flex;
+}
+
+.watchlistForm {
+    align-self: center;
+}
+
+.closeForm {
+    align-self: center;
+    margin-left: 10px;
+    align-content: center;
+    display: flex;
+}
+
+.listingHeaderTitle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+}
+
+.headerBtn {
+    border-radius: 10px;
+    height: 35px;
+    border-style: none;
+    background-color: white;
+}
+
+.listingBid {
+    display: flex;
+    align-items: center; 
+    justify-self: center;
+    border-style: solid;
+    border-radius: 30px;
+    padding: 15px;
+    border-color: orange;
+    margin-bottom: 50px;
+}
+
+.bidForm {
+    display: flex;
+    margin: 20px;
+}
+
+.bidForm input {
+    margin: 10px;
+}
+
+.comments {
+    display: flex;
+    align-items: center;
+}
+
+.commentForm {
+    width: 800px;
+    align-items: center;
+    resize: none;
+}
+
+.commentsTitle {
+    text-align: center;
+}
+
+.commentBtn {
+    justify-self: center;
+    display: flex;
+    height: 30px;
+}
+
+.commentContainer {
+    justify-self: center;
+}
+
+.commentItem {
+    list-style-type: none;
+}
+
+.comment {
+    border-style: solid;
+    border-color: lightgray;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    display: grid;
+    border-width: 1px;
 }

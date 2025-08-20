@@ -39,11 +39,15 @@ class BidForm(forms.Form):
         min_value = 0,
         decimal_places = 2,
         max_digits = 10,
-        widget = forms.NumberInput()
+        widget=forms.NumberInput(attrs={
+            'placeholder': 'Enter your bid'
+        })
     )
 
 class CommentForm(forms.Form):
     comment = forms.CharField(
-        label = "Comment",
-        widget = forms.Textarea()
+        label = "",
+        widget=forms.Textarea(attrs={
+            'class': 'commentForm'
+        })
     )

@@ -1,103 +1,137 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Listing: {{ name }}</h2>
-    {% if isActive %}
-        <form class="watchlistForm" method="POST">
-            {% csrf_token %}
-            <div>
-                {% if inWatchlist %}
-                    <input type="submit" value="Remove from Watchlist">
-                {% else %}
-                    <input type="submit" value="Add to Watchlist">
-                {% endif %}
-                <input type="hidden" name="watchlist" value="watchlist">
+    <div class="listingHeader">
+        <div class="listingHeaderTitle">
+            <h2>{{ listing.name }}</h2>
+        </div>
+        <div class="listingHeaderBtn">
+            <div class="watchlistForm">
+                {% if isActive %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div>
+                            {% if inWatchlist %}
+                                <input class="headerBtn" type="submit" value="Remove from Watchlist">
+                            {% else %}
+                                <input class="headerBtn" type="submit" value="Add to Watchlist">
+                            {% endif %}
+                            <input type="hidden" name="watchlist" value="watchlist">
+                        </div>
+                    </form>    
+                {% endif %}   
+            </div>     
+            <div class="closeForm">
+                {% if isOwner and isActive %}
+                        <form  method="POST">
+                            {% csrf_token %}
+                            <div>
+                                <input class="headerBtn" type="submit" value="Close Auction"> 
+                            </div>
+                            <input type="hidden" name="close" value="close">
+                        </form>
+                {% endif %}    
+            </div>    
+        </div>
+        
+    </div>
+
+    <div class="listingInfo">
+        {% if listing.photo %}
+            <div class="listingImg">
+                <image src="{{ listing.photo }}" alt="{{ listing.name }}"></image> 
             </div>
-        </form>    
-    {% endif %}
-    {% if listing.photo %}
-    <div class="listingImg">
-       <image src="{{ listing.photo }}" alt="{{ listing.name }}"></image> 
-    </div>
-    {% endif %}
-    
-    <div>
-        <label>{{ listing.description }}</label>        
-    </div>
-
-    <div>
-        <label>${{ highestBid }}</label>
-        <label>{{ bidCount }} bids so far.</label>
-        {% if isCurrentBid and isActive %}
-            <label>Your bid is the current bid.</label>
         {% endif %}
-    </div>
+        
+        <div class="listingDescription">
+            <h3>Details</h3>
+            <ul>
+                    <li>
+                        <div>
+                            <label>Description: {{ listing.description }}</label>      
+                        </div>    
+                    </li>
+                    <li>
+                        {% if listing.category %}
+                            <label>Category: {{ listing.category }}</label>
+                        {% else %}
+                            <label>Category: No Category Listed</label>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <div>
+                            <label>Price: ${{ highestBid }}</label>    
+                        </div>    
+                    </li>
+                    <li>
+                        <label>Listed by: {{ listing.owner }}</label>
+                    </li>
+                    <li>
+                        {% if not isActive %}
+                            <label>Status: This listing is not active.</label>
+                        {% else %}
+                            <label>Status: Active.</label> 
+                        {% endif %}
+                    </li>
+                </ul>   
+            </div> 
+        </div>
 
-    {% if user.is_authenticated and isActive %}
-        <form class="bidForm" method="POST">
-            {% csrf_token %}
-            {{ bidForm }}
+        <div>
+            
+        </div>
+    {% if isWinner %}
+        <label>You won this auction.</label>
+    {% endif %} 
+    {% if isActive %}
+        <div class="listingBid">
             <div>
-                <input type="submit" value="Place Bid"> 
+                <h3>Place a Bid</h3>
+                <label>Bids: {{ bidCount }} |</label>   
+                {% if isCurrentBid %}
+                    <label>Your bid is the current bid.</label>
+                {% endif %} 
             </div>
             
-        </form>
-        <input type="hidden" name="bid" value="bid">
-    {% endif %}
-    {% if isOwner and isActive %}
-        <form class="closeForm" method="POST">
-            {% csrf_token %}
-            <div>
-                <input type="submit" value="Close Auction"> 
+            <div class="bidFormContainer">
+                {% if user.is_authenticated %}
+                    <form class="bidForm" method="POST">
+                        {% csrf_token %}
+                        {{ bidForm }}
+                        <input type="submit" value="Place Bid">       
+                    </form>
+                    <input type="hidden" name="bid" value="bid">
+                {% endif %}    
             </div>
-            <input type="hidden" name="close" value="close">
-        </form>
+        </div>
     {% endif %}
-    {% if not isActive %}
-        <label>This listing is not active.</label>
-        {% if isWinner %}
-            <label>You won this auction.</label>
-        {% endif %}
-    {% endif %}
+    <hr>
+ 
+    <h2 class="commentsTitle">Comments</h2>
     <div>
-        <label>Details</label>
         <ul>
-            <li>
-                <label>Listed by: {{ listing.owner }}</label>
-            </li>
-            <li>
-                {% if listing.category %}
-                    <label>Category: {{ listing.category }}</label>
-                {% else %}
-                    <label>Category: No Category Listed</label>
-                {% endif %}
-            </li>
-        </ul>        
-    </div>
-
-    <h2>Comments</h2>
+            {% for comm in comments %}
+                <li class="commentItem">
+                    <div class="comment">
+                        <label>User: {{ comm.user }}</label>
+                        <label class="date">{{ comm.date }}</label>
+                        <label>{{ comm.comment }}</label>    
+                    </div>
+                    
+                </li>
+            {% empty %}
+                <label>There are no comments</label>
+            {% endfor %}
+        </ul>    
+    </div> 
+    <hr>
     {% if user.is_authenticated and isActive %}
-    <form class="commentForm" method="POST">
-            {% csrf_token %}
-            {{ commentForm }}
-            <div>
-                <input type="submit" value="Add new comment"> 
-            </div>
-    </form>
-    <input type="hidden" name="comment" value="comment">
-    {% endif %}
-    <ul>
-        {% for comm in comments %}
-            <li>
-                <label>{{ comm.user }}</label>
-                <label>{{ comm.date }}</label>
-                <label>{{ comm.comment }}</label>
-            </li>
-        {% empty %}
-        <label>There are no comments</label>
-        {% endfor %}
-    </ul>
-    
-
-
+        <h3 class="commentsTitle">Add new comment</h3>
+        <form class="commentContainer" method="POST">
+                {% csrf_token %}
+                {{ commentForm }}
+                <input class="commentBtn" type="submit" value="Add new comment">
+        </form>
+        <input type="hidden" name="comment" value="comment">      
+    {% endif %} 
 {% endblock %}
